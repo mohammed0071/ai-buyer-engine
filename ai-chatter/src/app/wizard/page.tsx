@@ -1,51 +1,69 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const steps = [
   {
-    question: "What's your primary use case?",
+    question: "What describes you best?",
     options: [
-      { label: "Customer Support", icon: "🎧", value: "support" },
-      { label: "Sales & Lead Gen", icon: "💰", value: "sales" },
-      { label: "Internal Help Desk", icon: "🏢", value: "internal" },
-      { label: "E-commerce", icon: "🛒", value: "ecommerce" },
+      { label: "Individual Investor", icon: "🏠", value: "retail" },
+      { label: "Professional Investor", icon: "💼", value: "professional" },
+      { label: "Property Owner / Developer", icon: "🏗️", value: "partner" },
+      { label: "Institution / Fund", icon: "🏦", value: "institution" },
     ],
   },
   {
-    question: "How many conversations per month?",
+    question: "What are you most interested in?",
     options: [
-      { label: "Under 500", icon: "🌱", value: "starter" },
-      { label: "500 – 5,000", icon: "📈", value: "growth" },
-      { label: "5,000 – 50,000", icon: "🚀", value: "scale" },
-      { label: "50,000+", icon: "🏗️", value: "enterprise" },
+      { label: "Learning about tokenization", icon: "📖", value: "learn" },
+      { label: "Investing in property tokens", icon: "📈", value: "invest" },
+      { label: "Tokenizing my property", icon: "🔗", value: "tokenize" },
+      { label: "Understanding the $ESX token", icon: "⚡", value: "esx" },
     ],
   },
   {
-    question: "Which channels do you need?",
+    question: "What's your experience with digital assets?",
     options: [
-      { label: "Website Widget", icon: "🌐", value: "web" },
-      { label: "WhatsApp & SMS", icon: "📱", value: "messaging" },
-      { label: "Slack / Teams", icon: "💼", value: "workplace" },
-      { label: "All of the Above", icon: "✨", value: "omni" },
-    ],
-  },
-  {
-    question: "What matters most to you?",
-    options: [
-      { label: "Easy Setup", icon: "⚡", value: "ease" },
-      { label: "Advanced AI", icon: "🧠", value: "ai" },
-      { label: "Integrations", icon: "🔗", value: "integrations" },
-      { label: "Analytics", icon: "📊", value: "analytics" },
+      { label: "New to this", icon: "🌱", value: "beginner" },
+      { label: "Some experience", icon: "📊", value: "intermediate" },
+      { label: "Very experienced", icon: "🚀", value: "advanced" },
+      { label: "Institutional level", icon: "🏛️", value: "institutional" },
     ],
   },
 ];
 
+const results: Record<string, { title: string; description: string; link: string; linkText: string }> = {
+  retail: {
+    title: "Start with Education",
+    description: "We recommend beginning with our Learn page to understand how tokenized real estate works, the risks involved, and how regulated access is structured.",
+    link: "/retail",
+    linkText: "Retail Investor Page →",
+  },
+  professional: {
+    title: "Explore Professional Access",
+    description: "As a professional investor, you may be eligible for priority access and enhanced features. Let's check your eligibility.",
+    link: "/professional",
+    linkText: "Professional Access →",
+  },
+  partner: {
+    title: "Partnership Opportunities",
+    description: "Learn how to tokenize and distribute your real estate assets through our regulated platform.",
+    link: "/partnerships",
+    linkText: "Partnerships Page →",
+  },
+  institution: {
+    title: "Institutional Solutions",
+    description: "White-label infrastructure, compliance frameworks, and distribution tools for institutional partners.",
+    link: "/partnerships",
+    linkText: "Contact Our Team →",
+  },
+};
+
 export default function WizardPage() {
-  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
+  const [completed, setCompleted] = useState(false);
 
   const handleSelect = (value: string) => {
     const newAnswers = [...answers, value];
@@ -54,95 +72,96 @@ export default function WizardPage() {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      // Encode answers and go to results
-      const params = new URLSearchParams({
-        useCase: newAnswers[0],
-        volume: newAnswers[1],
-        channels: newAnswers[2],
-        priority: newAnswers[3],
-      });
-      router.push(`/wizard/results?${params.toString()}`);
+      setCompleted(true);
     }
   };
 
-  const step = steps[currentStep];
-  const progress = ((currentStep + 1) / steps.length) * 100;
+  const result = results[answers[0]] || results.retail;
 
   return (
     <>
-      {/* Hero */}
-      <section className="hero-gradient pt-32 pb-12">
-        <div className="relative z-10 mx-auto max-w-[1200px] px-6 text-center animate-fade-in-up">
-          <span className="inline-block text-sm font-semibold text-blue-300 bg-blue-500/15 border border-blue-400/30 px-4 py-1.5 rounded-full mb-6 tracking-wide uppercase">
-            AI Wizard
-          </span>
-          <h1 className="text-4xl md:text-5xl font-bold text-white leading-[1.1] tracking-tight mb-4">
-            Find your perfect
-            <br />
-            <span className="text-blue-400">AI setup</span>
-          </h1>
-          <p className="text-lg text-white/70 max-w-xl mx-auto leading-relaxed">
-            Answer 4 quick questions and we&apos;ll recommend the best tools and
-            plan for your needs.
-          </p>
-        </div>
-      </section>
+      <section className="hero-pale pt-32 pb-20 min-h-screen">
+        <div className="relative z-10 mx-auto max-w-[700px] px-6">
+          {!completed ? (
+            <div className="animate-fade-in-up">
+              {/* Progress */}
+              <div className="flex items-center gap-2 mb-8">
+                {steps.map((_, i) => (
+                  <div
+                    key={i}
+                    className={`h-1.5 flex-1 rounded-full transition-colors ${
+                      i <= currentStep ? "bg-navy-600" : "bg-navy-100"
+                    }`}
+                  />
+                ))}
+              </div>
 
-      {/* Wizard Steps */}
-      <section className="py-16 bg-white min-h-[60vh]">
-        <div className="mx-auto max-w-[700px] px-6">
-          {/* Progress bar */}
-          <div className="mb-10">
-            <div className="flex items-center justify-between text-sm text-muted mb-2">
-              <span>
-                Step {currentStep + 1} of {steps.length}
-              </span>
-              <span>{Math.round(progress)}%</span>
-            </div>
-            <div className="h-2 bg-section-alt rounded-full overflow-hidden">
-              <div
-                className="h-full bg-navy-600 rounded-full transition-all duration-500 ease-out"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-          </div>
-
-          {/* Question */}
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-10">
-            {step.question}
-          </h2>
-
-          {/* Options */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {step.options.map((option) => (
-              <button
-                key={option.value}
-                onClick={() => handleSelect(option.value)}
-                className="card text-left cursor-pointer hover:border-navy-600 hover:shadow-[var(--shadow-card-hover)] transition-all group"
-              >
-                <div className="flex items-center gap-4">
-                  <span className="text-3xl group-hover:scale-110 transition-transform">
-                    {option.icon}
-                  </span>
-                  <span className="text-lg font-semibold text-navy-900">
-                    {option.label}
-                  </span>
+              <div className="text-center mb-10">
+                <div className="hero-badge mx-auto">
+                  <span className="w-2 h-2 rounded-full bg-accent-green inline-block"></span>
+                  Step {currentStep + 1} of {steps.length}
                 </div>
-              </button>
-            ))}
-          </div>
+                <h1 className="text-3xl md:text-4xl font-bold text-navy-900 mt-4">
+                  {steps[currentStep].question}
+                </h1>
+              </div>
 
-          {/* Back button */}
-          {currentStep > 0 && (
-            <button
-              onClick={() => {
-                setCurrentStep(currentStep - 1);
-                setAnswers(answers.slice(0, -1));
-              }}
-              className="btn-ghost mt-8 mx-auto block text-sm text-muted hover:text-navy-600"
-            >
-              ← Go Back
-            </button>
+              <div className="grid grid-cols-2 gap-4">
+                {steps[currentStep].options.map((option) => (
+                  <button
+                    key={option.value}
+                    onClick={() => handleSelect(option.value)}
+                    className="card text-center cursor-pointer hover:border-navy-600 transition-colors"
+                  >
+                    <span className="text-3xl block mb-3">{option.icon}</span>
+                    <span className="font-semibold text-navy-900">{option.label}</span>
+                  </button>
+                ))}
+              </div>
+
+              {currentStep > 0 && (
+                <button
+                  onClick={() => {
+                    setCurrentStep(currentStep - 1);
+                    setAnswers(answers.slice(0, -1));
+                  }}
+                  className="btn-ghost mx-auto mt-6 block text-sm"
+                >
+                  ← Back
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className="animate-fade-in-up text-center">
+              <div className="hero-badge mx-auto">
+                <span className="w-2 h-2 rounded-full bg-accent-green inline-block"></span>
+                Your Recommendation
+              </div>
+              <h1 className="text-3xl md:text-4xl font-bold text-navy-900 mt-4 mb-4">
+                {result.title}
+              </h1>
+              <p className="text-lg text-body max-w-lg mx-auto mb-8 leading-relaxed">
+                {result.description}
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Link href={result.link} className="btn-cyan px-8 py-3.5 text-base">
+                  {result.linkText}
+                </Link>
+                <Link href="/learn" className="btn-secondary px-8 py-3.5 text-base">
+                  Learn the Model
+                </Link>
+              </div>
+              <button
+                onClick={() => {
+                  setCurrentStep(0);
+                  setAnswers([]);
+                  setCompleted(false);
+                }}
+                className="btn-ghost mx-auto mt-6 block text-sm"
+              >
+                Start Over
+              </button>
+            </div>
           )}
         </div>
       </section>

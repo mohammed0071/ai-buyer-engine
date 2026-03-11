@@ -10,9 +10,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "AI Chatter — AI-Powered Conversations for Modern Teams",
+  title: "EstateX — Tokenized Real Estate Investment Platform",
   description:
-    "Create intelligent chatbots, automate support, and delight customers with AI Chatter. Trusted by 10,000+ businesses worldwide.",
+    "Access institutional-grade property through regulated, tokenized structures. Built for transparency, designed for everyone.",
 };
 
 export default function RootLayout({

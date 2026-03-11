@@ -7,19 +7,19 @@ const contactMethods = [
     icon: "📧",
     title: "Email Us",
     description: "For general inquiries and support",
-    detail: "hello@aichatter.io",
+    detail: "hello@estatex.eu",
   },
   {
     icon: "💬",
     title: "Live Chat",
     description: "Talk to our team in real-time",
-    detail: "Available 24/7",
+    detail: "Available during business hours",
   },
   {
     icon: "📍",
-    title: "Visit Us",
-    description: "Our headquarters",
-    detail: "San Francisco, CA",
+    title: "Registered Office",
+    description: "EU Registered Entity",
+    detail: "Netherlands · NL 83876243",
   },
 ];
 
@@ -28,21 +28,43 @@ export default function ContactPage() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="hero-gradient pt-32 pb-20">
-        <div className="relative z-10 mx-auto max-w-[1200px] px-6 text-center animate-fade-in-up">
-          <span className="inline-block text-sm font-semibold text-blue-300 bg-blue-500/15 border border-blue-400/30 px-4 py-1.5 rounded-full mb-6 tracking-wide uppercase">
-            Contact
-          </span>
-          <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-white leading-[1.1] tracking-tight mb-6">
-            Let&apos;s start a
-            <br />
-            <span className="text-blue-400">conversation</span>
-          </h1>
-          <p className="text-lg text-white/70 max-w-2xl mx-auto leading-relaxed">
-            Have a question, need a demo, or want to explore how AI Chatter can
-            help your team? We&apos;d love to hear from you.
-          </p>
+      {/* Hero — pale split layout */}
+      <section className="hero-pale pt-32 pb-20">
+        <div className="relative z-10 mx-auto max-w-[1200px] px-6">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="animate-fade-in-up">
+              <div className="hero-badge">
+                <span className="w-2 h-2 rounded-full bg-accent-green inline-block"></span>
+                Contact
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-navy-900 leading-[1.1] tracking-tight mb-6">
+                Let&apos;s start a
+                <br />
+                <span className="text-navy-600">conversation</span>
+              </h1>
+              <p className="text-lg text-body max-w-lg leading-relaxed">
+                Have a question about tokenized real estate, or want to explore how
+                EstateX can work for you? We&apos;d love to hear from you.
+              </p>
+            </div>
+            <div className="animate-fade-in-up animate-delay-200 hidden md:flex justify-center">
+              <div className="hero-illustration animate-float max-w-xs w-full p-6">
+                <div className="space-y-4">
+                  {contactMethods.map((method) => (
+                    <div key={method.title} className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-navy-50 flex items-center justify-center text-lg flex-shrink-0">
+                        {method.icon}
+                      </div>
+                      <div>
+                        <div className="text-sm font-semibold text-navy-900">{method.title}</div>
+                        <div className="text-xs text-muted">{method.detail}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -149,7 +171,7 @@ export default function ContactPage() {
                   placeholder="Tell us about your project..."
                 />
               </div>
-              <button type="submit" className="btn-primary w-full py-3.5 text-base">
+              <button type="submit" className="btn-cyan w-full py-3.5 text-base">
                 Send Message
               </button>
             </form>
