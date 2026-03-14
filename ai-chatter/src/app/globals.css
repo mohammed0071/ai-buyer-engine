@@ -1,0 +1,461 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Navy palette */
+  --color-navy-900: #0f1b2d;
+  --color-navy-800: #162040;
+  --color-navy-700: #1e3a5f;
+  --color-navy-600: #2563eb;
+  --color-navy-500: #3b82f6;
+  --color-navy-100: #e0ecff;
+  --color-navy-50: #f0f5ff;
+
+  /* Semantic */
+  --color-background: #ffffff;
+  --color-foreground: #0f1b2d;
+  --color-muted: #94a3b8;
+  --color-body: #475569;
+  --color-border: #e2e8f0;
+  --color-section-alt: #f8fafc;
+
+  /* Pale hero background */
+  --color-hero-pale: #f5f7fb;
+  --color-hero-pale-accent: #eef2f9;
+
+  /* Accent */
+  --color-accent-cyan: #06b6d4;
+  --color-accent-cyan-dark: #0891b2;
+  --color-accent-green: #22c55e;
+  --color-accent-violet: #8b5cf6;
+
+  /* Fonts */
+  --font-sans: var(--font-inter);
+
+  /* Shadows */
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 12px 40px rgba(0, 0, 0, 0.12);
+  --shadow-nav: 0 2px 20px rgba(0, 0, 0, 0.06);
+  --shadow-mockup: 0 24px 80px rgba(0, 0, 0, 0.1);
+}
+
+/* Base styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-body);
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-navy-900);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+/* Section tag pill */
+.section-tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-navy-600);
+  background: var(--color-navy-100);
+  padding: 0.4rem 1rem;
+  border-radius: 9999px;
+  margin-bottom: 1rem;
+}
+
+/* Hero badge - light variant for pale backgrounds */
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-navy-600);
+  background: white;
+  border: 1px solid var(--color-navy-100);
+  padding: 0.4rem 1.2rem;
+  border-radius: 9999px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08);
+}
+
+/* Card base */
+.card {
+  background: white;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* Button base */
+.btn-cyan {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--color-accent-cyan);
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.75rem 2rem;
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-cyan:hover {
+  background: var(--color-accent-cyan-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(6, 182, 212, 0.3);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--color-navy-600);
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.75rem 2rem;
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: var(--color-navy-600);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.75rem 2rem;
+  border-radius: 9999px;
+  border: 2px solid var(--color-navy-600);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: var(--color-navy-600);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--color-navy-900);
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  border: none;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-ghost:hover {
+  background: var(--color-navy-50);
+  color: var(--color-navy-600);
+}
+
+/* Link-style CTA */
+.btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--color-navy-600);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+.btn-link:hover {
+  color: #1d4ed8;
+  gap: 0.6rem;
+}
+
+/* ===== HERO STYLES ===== */
+
+/* Pale hero - clean promotional style */
+.hero-pale {
+  background: var(--color-hero-pale);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-pale::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 70% 30%, rgba(37, 99, 235, 0.04), transparent 60%),
+    radial-gradient(ellipse at 20% 80%, rgba(139, 92, 246, 0.03), transparent 50%);
+  pointer-events: none;
+}
+
+/* Legacy dark hero gradient (kept for CTA sections) */
+.hero-gradient {
+  background: linear-gradient(135deg, #0f1b2d 0%, #162040 40%, #1e3a5f 80%, #0f1b2d 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-gradient::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 50%, rgba(37, 99, 235, 0.15), transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.1), transparent 50%);
+  pointer-events: none;
+}
+
+/* ===== MOCKUP ILLUSTRATIONS ===== */
+
+/* Phone mockup container */
+.mockup-phone {
+  width: 280px;
+  height: 560px;
+  background: white;
+  border-radius: 36px;
+  border: 6px solid #1e293b;
+  box-shadow: var(--shadow-mockup);
+  overflow: hidden;
+  position: relative;
+}
+
+.mockup-phone::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 24px;
+  background: #1e293b;
+  border-radius: 0 0 16px 16px;
+  z-index: 10;
+}
+
+/* Browser mockup container */
+.mockup-browser {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-mockup);
+  overflow: hidden;
+}
+
+.mockup-browser-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 16px;
+  background: #f8fafc;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.mockup-browser-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #e2e8f0;
+}
+
+/* Illustration card - used inside heroes */
+.hero-illustration {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-mockup);
+  padding: 2rem;
+  position: relative;
+}
+
+/* ===== CTA SECTION - LIGHT VARIANT ===== */
+.cta-light {
+  background: var(--color-navy-50);
+  border-top: 1px solid var(--color-navy-100);
+  border-bottom: 1px solid var(--color-navy-100);
+}
+
+/* ===== SPLIT SECTION ===== */
+.split-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .split-section {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+/* ===== FEATURE ICON BOX ===== */
+.feature-icon-box {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--color-navy-50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-delay-100 { animation-delay: 0.1s; }
+.animate-delay-200 { animation-delay: 0.2s; }
+.animate-delay-300 { animation-delay: 0.3s; }
+.animate-delay-400 { animation-delay: 0.4s; }
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Marquee / ticker */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: inline-block;
+  animation: marquee 20s linear infinite;
+}
+
+/* ===== ENHANCED HOVER & VISUAL FLAIR ===== */
+
+/* Card hover glow */
+.card:hover {
+  border-color: var(--color-navy-100);
+}
+
+/* Section tag hover */
+.section-tag:hover {
+  background: var(--color-navy-600);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+/* Feature icon box hover */
+.feature-icon-box {
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover .feature-icon-box {
+  transform: scale(1.1);
+  background: var(--color-navy-100);
+}
+
+/* Smooth gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-navy-600), var(--color-accent-violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Hero badge pulse */
+.hero-badge span.bg-accent-green {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Stagger animation for grids */
+.card:nth-child(1) { animation: fadeInUp 0.5s ease-out 0.05s both; }
+.card:nth-child(2) { animation: fadeInUp 0.5s ease-out 0.1s both; }
+.card:nth-child(3) { animation: fadeInUp 0.5s ease-out 0.15s both; }
+.card:nth-child(4) { animation: fadeInUp 0.5s ease-out 0.2s both; }
+
+/* Consistent focus styles */
+.btn-cyan:focus-visible,
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.btn-ghost:focus-visible {
+  outline: 2px solid var(--color-navy-600);
+  outline-offset: 2px;
+}
+
+/* Hero illustration subtle border glow */
+.hero-illustration {
+  transition: box-shadow 0.4s ease;
+}
+
+.hero-illustration:hover {
+  box-shadow: 0 24px 80px rgba(37, 99, 235, 0.12);
+}

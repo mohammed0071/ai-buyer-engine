@@ -1,0 +1,341 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@200,300,400,500,600,700&f[]=satoshi@300,400,500,700&display=swap');
+
+:root {
+  --background: #0A0A0F;
+  --foreground: #FFFFFF;
+  --accent: #00D4AA;
+  --accent-purple: #7B2CBF;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: "Satoshi", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Clash Display", sans-serif;
+}
+
+/* ─── Glassmorphism ─── */
+.glass {
+  background: rgba(18, 18, 26, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glass-hover {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.glass-hover:hover {
+  background: rgba(18, 18, 26, 0.8);
+  border-color: rgba(0, 212, 170, 0.25);
+  transform: translateY(-8px);
+  box-shadow:
+    0 20px 60px rgba(0, 212, 170, 0.12),
+    0 0 40px rgba(0, 212, 170, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* ─── Gradient text ─── */
+.gradient-text {
+  background: linear-gradient(135deg, #00D4AA 0%, #00E5BB 25%, #7B2CBF 75%, #9B4DDF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Glowing headline ─── */
+.glow-text {
+  text-shadow:
+    0 0 20px rgba(0, 212, 170, 0.3),
+    0 0 40px rgba(0, 212, 170, 0.15),
+    0 0 80px rgba(123, 44, 191, 0.1);
+}
+
+/* ─── Mesh gradient background ─── */
+.mesh-gradient {
+  background:
+    radial-gradient(at 20% 20%, rgba(0, 212, 170, 0.2) 0%, transparent 50%),
+    radial-gradient(at 80% 30%, rgba(123, 44, 191, 0.2) 0%, transparent 50%),
+    radial-gradient(at 50% 80%, rgba(0, 212, 170, 0.1) 0%, transparent 50%),
+    radial-gradient(at 90% 90%, rgba(123, 44, 191, 0.08) 0%, transparent 40%),
+    #0A0A0F;
+  background-size: 200% 200%;
+  animation: meshMove 20s ease infinite;
+}
+
+@keyframes meshMove {
+  0%, 100% { background-position: 0% 0%, 100% 0%, 50% 100%, 90% 90%; }
+  33% { background-position: 100% 50%, 0% 50%, 100% 0%, 10% 50%; }
+  66% { background-position: 50% 100%, 50% 0%, 0% 50%, 80% 20%; }
+}
+
+/* ─── Grain overlay ─── */
+.grain::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* ─── Noise texture on surfaces ─── */
+.noise-overlay {
+  position: relative;
+}
+.noise-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* ─── Holographic shimmer on hover ─── */
+.holo-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.holo-shimmer::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 30%,
+    rgba(0, 212, 170, 0.06) 40%,
+    rgba(123, 44, 191, 0.08) 45%,
+    rgba(0, 212, 170, 0.06) 50%,
+    transparent 60%
+  );
+  transform: rotate(0deg) translateX(-100%);
+  transition: none;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.holo-shimmer:hover::before {
+  animation: shimmerSlide 0.8s ease forwards;
+}
+
+@keyframes shimmerSlide {
+  0% { transform: rotate(45deg) translateX(-100%); }
+  100% { transform: rotate(45deg) translateX(100%); }
+}
+
+/* ─── Rotating gradient border ─── */
+.gradient-border {
+  position: relative;
+  z-index: 0;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    rgba(0, 212, 170, 0.3) 25%,
+    rgba(123, 44, 191, 0.3) 50%,
+    rgba(0, 212, 170, 0.3) 75%,
+    transparent 100%
+  );
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.gradient-border:hover::before {
+  opacity: 1;
+  animation: borderRotate 3s linear infinite;
+}
+
+@keyframes borderRotate {
+  from { background: conic-gradient(from 0deg, transparent 0%, rgba(0,212,170,0.3) 25%, rgba(123,44,191,0.3) 50%, rgba(0,212,170,0.3) 75%, transparent 100%); }
+  to { background: conic-gradient(from 360deg, transparent 0%, rgba(0,212,170,0.3) 25%, rgba(123,44,191,0.3) 50%, rgba(0,212,170,0.3) 75%, transparent 100%); }
+}
+
+/* ─── Pulsing glow badge ─── */
+.pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(0, 212, 170, 0.4), 0 0 20px rgba(0, 212, 170, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 212, 170, 0.6), 0 0 40px rgba(0, 212, 170, 0.3), 0 0 60px rgba(0, 212, 170, 0.15);
+  }
+}
+
+/* ─── Button ripple ─── */
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-ripple .ripple-effect {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(0);
+  animation: ripple 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ─── Glowing button border ─── */
+.btn-glow {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.btn-glow::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(0, 212, 170, 0.4), rgba(123, 44, 191, 0.4));
+  z-index: -1;
+  opacity: 0;
+  filter: blur(8px);
+  transition: opacity 0.3s ease;
+}
+
+.btn-glow:hover::after {
+  opacity: 1;
+}
+
+/* ─── Animated grid pattern ─── */
+.grid-pattern {
+  position: relative;
+}
+
+.grid-pattern::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 212, 170, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 170, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+  pointer-events: none;
+  animation: gridFloat 30s linear infinite;
+}
+
+@keyframes gridFloat {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(60px, 60px); }
+}
+
+/* ─── DNA helix overlay (subtle) ─── */
+.dna-overlay {
+  position: relative;
+}
+
+.dna-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 2px 40px at 30% 20%, rgba(0, 212, 170, 0.06) 0%, transparent 100%),
+    radial-gradient(ellipse 2px 40px at 70% 40%, rgba(123, 44, 191, 0.06) 0%, transparent 100%),
+    radial-gradient(ellipse 2px 40px at 40% 60%, rgba(0, 212, 170, 0.04) 0%, transparent 100%),
+    radial-gradient(ellipse 2px 40px at 60% 80%, rgba(123, 44, 191, 0.04) 0%, transparent 100%);
+  pointer-events: none;
+  opacity: 0.7;
+  animation: dnaFloat 15s ease-in-out infinite;
+}
+
+@keyframes dnaFloat {
+  0%, 100% { transform: translateY(0); opacity: 0.7; }
+  50% { transform: translateY(-20px); opacity: 1; }
+}
+
+/* ─── Floating particle dots (CSS only) ─── */
+.particle-dot {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* ─── Section background accents ─── */
+.section-glow-teal {
+  position: relative;
+}
+.section-glow-teal::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(0, 212, 170, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.section-glow-purple {
+  position: relative;
+}
+.section-glow-purple::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(123, 44, 191, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0A0A0F;
+}
+::-webkit-scrollbar-thumb {
+  background: #1A1A2E;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00D4AA;
+}
+
+/* ─── Selection ─── */
+::selection {
+  background: rgba(0, 212, 170, 0.3);
+  color: white;
+}
