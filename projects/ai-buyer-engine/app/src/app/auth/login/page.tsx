@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Zap, Loader2 } from 'lucide-react';
+import { createClient } from '@/lib/supabase/client';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -15,27 +16,60 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const isSupabaseReady = process.env.NEXT_PUBLIC_SUPABASE_URL !== 'your-supabase-url'
+    && !!process.env.NEXT_PUBLIC_SUPABASE_URL
+    && !process.env.NEXT_PUBLIC_SUPABASE_URL?.includes('placeholder');
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
-    // Demo mode - just redirect
-    // In production, this would call Supabase auth
-    try {
-      // Simulate auth delay
-      await new Promise(resolve => setTimeout(resolve, 800));
+    if (!isSupabaseReady) {
+      // Demo mode
+      await new Promise(resolve => setTimeout(resolve, 500));
       router.push('/dashboard');
+      return;
+    }
+
+    try {
+      const supabase = createClient();
+      const { error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (authError) {
+        setError(authError.message);
+        setLoading(false);
+        return;
+      }
+
+      router.push('/dashboard');
+      router.refresh();
     } catch {
-      setError('Invalid email or password');
-    } finally {
+      setError('An unexpected error occurred');
       setLoading(false);
     }
   };
 
   const handleGoogleLogin = async () => {
-    // In production: supabase.auth.signInWithOAuth({ provider: 'google' })
-    router.push('/dashboard');
+    if (!isSupabaseReady) {
+      router.push('/dashboard');
+      return;
+    }
+
+    const supabase = createClient();
+    const { error: authError } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+
+    if (authError) {
+      setError(authError.message);
+    }
   };
 
   return (
@@ -49,6 +83,9 @@ export default function LoginPage() {
           </Link>
           <h1 className="text-2xl font-bold text-white mb-2">Welcome back</h1>
           <p className="text-zinc-400">Log in to your AI Buyer Engine account</p>
+          {!isSupabaseReady && (
+            <p className="text-xs text-amber-400 mt-2 px-3 py-1 bg-amber-400/10 rounded-full inline-block">Demo Mode — any credentials will work</p>
+          )}
         </div>
 
         <div className="space-y-4">

@@ -1,21 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Switch } from '@/components/ui/switch';
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
-} from '@/components/ui/dialog';
-import {
-  Target, Plus, Edit2, Trash2, X, Users, Zap, CheckCircle2
+  Target, Plus, Edit2, Trash2, X, Users, CheckCircle2, Loader2
 } from 'lucide-react';
-import { mockICPs } from '@/lib/mock-data';
 import { ICP } from '@/types';
+import { toast } from 'sonner';
 
 function TagInput({ label, values, onAdd, onRemove, placeholder }: {
   label: string;
@@ -61,7 +56,9 @@ function TagInput({ label, values, onAdd, onRemove, placeholder }: {
 }
 
 export default function ICPPage() {
-  const [icps, setICPs] = useState(mockICPs);
+  const [icps, setICPs] = useState<ICP[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [editingICP, setEditingICP] = useState<ICP | null>(null);
 
@@ -74,6 +71,22 @@ export default function ICPPage() {
   const [keywords, setKeywords] = useState<string[]>([]);
   const [locations, setLocations] = useState<string[]>([]);
   const [techStack, setTechStack] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetchICPs();
+  }, []);
+
+  const fetchICPs = async () => {
+    try {
+      const res = await fetch('/api/icp');
+      const data = await res.json();
+      setICPs(data.data || []);
+    } catch (err) {
+      console.error('Error fetching ICPs:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const resetForm = () => {
     setName('');
@@ -98,6 +111,75 @@ export default function ICPPage() {
     setEditingICP(icp);
     setIsCreating(true);
   };
+
+  const handleSave = async () => {
+    if (!name.trim()) {
+      toast.error('Please enter a profile name');
+      return;
+    }
+
+    setSaving(true);
+    const icpData = {
+      name,
+      criteria: {
+        industries,
+        company_sizes: companySizes,
+        roles,
+        seniority_levels: seniorityLevels,
+        keywords,
+        locations,
+        tech_stack: techStack,
+      },
+      negative_filters: [],
+    };
+
+    try {
+      if (editingICP) {
+        await fetch('/api/icp', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: editingICP.id, ...icpData }),
+        });
+        toast.success('ICP updated successfully');
+      } else {
+        await fetch('/api/icp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(icpData),
+        });
+        toast.success('ICP created successfully');
+      }
+
+      setIsCreating(false);
+      resetForm();
+      setEditingICP(null);
+      await fetchICPs();
+    } catch (err) {
+      console.error('Error saving ICP:', err);
+      toast.error('Failed to save ICP');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      await fetch(`/api/icp?id=${id}`, { method: 'DELETE' });
+      toast.success('ICP deleted');
+      await fetchICPs();
+    } catch (err) {
+      console.error('Error deleting ICP:', err);
+      toast.error('Failed to delete ICP');
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="w-8 h-8 text-blue-400 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -134,59 +216,59 @@ export default function ICPPage() {
                 <Button variant="ghost" size="sm" className="text-zinc-400 hover:text-white h-8 w-8 p-0" onClick={() => loadICP(icp)}>
                   <Edit2 className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="sm" className="text-zinc-400 hover:text-red-400 h-8 w-8 p-0">
+                <Button variant="ghost" size="sm" className="text-zinc-400 hover:text-red-400 h-8 w-8 p-0" onClick={() => handleDelete(icp.id)}>
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
             </div>
 
             <div className="space-y-3">
-              {icp.criteria.industries.length > 0 && (
+              {icp.criteria.industries?.length > 0 && (
                 <div>
                   <span className="text-xs text-zinc-500 uppercase tracking-wider">Industries</span>
                   <div className="flex flex-wrap gap-1 mt-1">
-                    {icp.criteria.industries.map((i) => (
+                    {icp.criteria.industries.map((i: string) => (
                       <Badge key={i} variant="outline" className="border-zinc-700 text-zinc-300 text-xs">{i}</Badge>
                     ))}
                   </div>
                 </div>
               )}
-              {icp.criteria.roles.length > 0 && (
+              {icp.criteria.roles?.length > 0 && (
                 <div>
                   <span className="text-xs text-zinc-500 uppercase tracking-wider">Roles</span>
                   <div className="flex flex-wrap gap-1 mt-1">
-                    {icp.criteria.roles.map((r) => (
+                    {icp.criteria.roles.map((r: string) => (
                       <Badge key={r} variant="outline" className="border-blue-500/20 text-blue-400 text-xs">{r}</Badge>
                     ))}
                   </div>
                 </div>
               )}
-              {icp.criteria.keywords.length > 0 && (
+              {icp.criteria.keywords?.length > 0 && (
                 <div>
                   <span className="text-xs text-zinc-500 uppercase tracking-wider">Keywords</span>
                   <div className="flex flex-wrap gap-1 mt-1">
-                    {icp.criteria.keywords.map((k) => (
+                    {icp.criteria.keywords.map((k: string) => (
                       <Badge key={k} variant="outline" className="border-amber-500/20 text-amber-400 text-xs">{k}</Badge>
                     ))}
                   </div>
                 </div>
               )}
-              {icp.criteria.company_sizes.length > 0 && (
+              {icp.criteria.company_sizes?.length > 0 && (
                 <div>
                   <span className="text-xs text-zinc-500 uppercase tracking-wider">Company Size</span>
                   <div className="flex flex-wrap gap-1 mt-1">
-                    {icp.criteria.company_sizes.map((s) => (
+                    {icp.criteria.company_sizes.map((s: string) => (
                       <Badge key={s} variant="outline" className="border-zinc-700 text-zinc-400 text-xs">{s} employees</Badge>
                     ))}
                   </div>
                 </div>
               )}
 
-              {icp.negative_filters.length > 0 && (
+              {icp.negative_filters?.length > 0 && (
                 <div className="pt-2 border-t border-zinc-800">
                   <span className="text-xs text-zinc-500 uppercase tracking-wider">Exclusions</span>
                   <div className="flex flex-wrap gap-1 mt-1">
-                    {icp.negative_filters.map((f, i) => (
+                    {icp.negative_filters.map((f: any, i: number) => (
                       <Badge key={i} variant="outline" className="border-red-500/20 text-red-400 text-xs">
                         <X className="w-2.5 h-2.5 mr-1" /> {f.value}
                       </Badge>
@@ -222,68 +304,21 @@ export default function ICPPage() {
               />
             </div>
 
-            <TagInput
-              label="Industries"
-              values={industries}
-              onAdd={(v) => setIndustries([...industries, v])}
-              onRemove={(v) => setIndustries(industries.filter(i => i !== v))}
-              placeholder="Type an industry and press Enter"
-            />
-
-            <TagInput
-              label="Target Roles"
-              values={roles}
-              onAdd={(v) => setRoles([...roles, v])}
-              onRemove={(v) => setRoles(roles.filter(r => r !== v))}
-              placeholder="e.g., VP Sales, Head of Growth"
-            />
-
-            <TagInput
-              label="Company Sizes"
-              values={companySizes}
-              onAdd={(v) => setCompanySizes([...companySizes, v])}
-              onRemove={(v) => setCompanySizes(companySizes.filter(s => s !== v))}
-              placeholder="e.g., 10-50, 50-200"
-            />
-
-            <TagInput
-              label="Seniority Levels"
-              values={seniorityLevels}
-              onAdd={(v) => setSeniorityLevels([...seniorityLevels, v])}
-              onRemove={(v) => setSeniorityLevels(seniorityLevels.filter(s => s !== v))}
-              placeholder="e.g., Director, VP, C-Level"
-            />
-
-            <TagInput
-              label="Keywords (for signal matching)"
-              values={keywords}
-              onAdd={(v) => setKeywords([...keywords, v])}
-              onRemove={(v) => setKeywords(keywords.filter(k => k !== v))}
-              placeholder="e.g., outbound, SDR, prospecting"
-            />
-
-            <TagInput
-              label="Locations"
-              values={locations}
-              onAdd={(v) => setLocations([...locations, v])}
-              onRemove={(v) => setLocations(locations.filter(l => l !== v))}
-              placeholder="e.g., United States, United Kingdom"
-            />
-
-            <TagInput
-              label="Tech Stack"
-              values={techStack}
-              onAdd={(v) => setTechStack([...techStack, v])}
-              onRemove={(v) => setTechStack(techStack.filter(t => t !== v))}
-              placeholder="e.g., Salesforce, HubSpot"
-            />
+            <TagInput label="Industries" values={industries} onAdd={(v) => setIndustries([...industries, v])} onRemove={(v) => setIndustries(industries.filter(i => i !== v))} placeholder="Type an industry and press Enter" />
+            <TagInput label="Target Roles" values={roles} onAdd={(v) => setRoles([...roles, v])} onRemove={(v) => setRoles(roles.filter(r => r !== v))} placeholder="e.g., VP Sales, Head of Growth" />
+            <TagInput label="Company Sizes" values={companySizes} onAdd={(v) => setCompanySizes([...companySizes, v])} onRemove={(v) => setCompanySizes(companySizes.filter(s => s !== v))} placeholder="e.g., 10-50, 50-200" />
+            <TagInput label="Seniority Levels" values={seniorityLevels} onAdd={(v) => setSeniorityLevels([...seniorityLevels, v])} onRemove={(v) => setSeniorityLevels(seniorityLevels.filter(s => s !== v))} placeholder="e.g., Director, VP, C-Level" />
+            <TagInput label="Keywords (for signal matching)" values={keywords} onAdd={(v) => setKeywords([...keywords, v])} onRemove={(v) => setKeywords(keywords.filter(k => k !== v))} placeholder="e.g., outbound, SDR, prospecting" />
+            <TagInput label="Locations" values={locations} onAdd={(v) => setLocations([...locations, v])} onRemove={(v) => setLocations(locations.filter(l => l !== v))} placeholder="e.g., United States, United Kingdom" />
+            <TagInput label="Tech Stack" values={techStack} onAdd={(v) => setTechStack([...techStack, v])} onRemove={(v) => setTechStack(techStack.filter(t => t !== v))} placeholder="e.g., Salesforce, HubSpot" />
 
             <div className="flex items-center gap-4 pt-4 border-t border-zinc-800">
               <Button
                 className="bg-blue-600 hover:bg-blue-500 text-white"
-                onClick={() => setIsCreating(false)}
+                onClick={handleSave}
+                disabled={saving}
               >
-                <CheckCircle2 className="w-4 h-4 mr-2" />
+                {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <CheckCircle2 className="w-4 h-4 mr-2" />}
                 {editingICP ? 'Save Changes' : 'Create ICP'}
               </Button>
               <Button variant="ghost" className="text-zinc-400 hover:text-white" onClick={() => setIsCreating(false)}>

@@ -3,9 +3,10 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/lib/hooks/use-auth';
 import {
   LayoutDashboard, Radio, Users, MessageSquare, Calendar,
-  Target, Settings, BarChart3, Zap, CreditCard, LogOut
+  Target, Settings, BarChart3, Zap, LogOut
 } from 'lucide-react';
 
 const navItems = [
@@ -24,6 +25,19 @@ const bottomNavItems = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { user, isDemo, signOut } = useAuth();
+
+  const displayName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Demo User';
+  const displayEmail = user?.email || 'demo@buyerengine.ai';
+  const initial = displayName.charAt(0).toUpperCase();
+
+  const handleSignOut = () => {
+    if (isDemo) {
+      window.location.href = '/';
+    } else {
+      signOut();
+    }
+  };
 
   return (
     <aside className="w-64 h-screen bg-zinc-950 border-r border-zinc-800/50 flex flex-col fixed left-0 top-0 z-40">
@@ -89,16 +103,22 @@ export function Sidebar() {
         {/* User */}
         <div className="flex items-center gap-3 px-3 py-2.5 mt-2">
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center text-white text-sm font-medium">
-            M
+            {initial}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-zinc-200 truncate">Demo User</p>
-            <p className="text-xs text-zinc-500 truncate">demo@buyerengine.ai</p>
+            <p className="text-sm font-medium text-zinc-200 truncate">{displayName}</p>
+            <p className="text-xs text-zinc-500 truncate">{displayEmail}</p>
           </div>
-          <Link href="/" className="text-zinc-500 hover:text-zinc-300">
+          <button onClick={handleSignOut} className="text-zinc-500 hover:text-zinc-300" title="Sign out">
             <LogOut className="w-4 h-4" />
-          </Link>
+          </button>
         </div>
+
+        {isDemo && (
+          <div className="mx-3 mt-1 px-2 py-1 rounded bg-amber-400/10 border border-amber-400/20">
+            <p className="text-[10px] text-amber-400 text-center">Demo Mode — Mock Data</p>
+          </div>
+        )}
       </div>
     </aside>
   );

@@ -11,7 +11,7 @@ import {
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table';
-import { Users, Search, Upload, Plus, ExternalLink, MoreHorizontal, Zap, Target } from 'lucide-react';
+import { Users, Search, Upload, Plus, ExternalLink, MoreHorizontal, Zap, Target, Twitter, Linkedin } from 'lucide-react';
 import { mockProspects } from '@/lib/mock-data';
 
 const stageColors: Record<string, string> = {
@@ -43,7 +43,8 @@ export default function ProspectsPage() {
     if (stageFilter !== 'all' && p.stage !== stageFilter) return false;
     if (search && !p.name.toLowerCase().includes(search.toLowerCase()) &&
         !p.company?.toLowerCase().includes(search.toLowerCase()) &&
-        !p.twitter_handle?.toLowerCase().includes(search.toLowerCase())) return false;
+        !p.twitter_handle?.toLowerCase().includes(search.toLowerCase()) &&
+        !p.linkedin_url?.toLowerCase().includes(search.toLowerCase())) return false;
     return true;
   });
 
@@ -118,7 +119,21 @@ export default function ProspectsPage() {
                     </div>
                     <div>
                       <p className="text-sm font-medium text-white">{prospect.name}</p>
-                      <p className="text-xs text-zinc-500">{prospect.twitter_handle}</p>
+                      <div className="flex items-center gap-2">
+                        {prospect.twitter_handle && (
+                          <span className="text-xs text-zinc-500 flex items-center gap-0.5">
+                            <Twitter className="w-3 h-3" /> {prospect.twitter_handle}
+                          </span>
+                        )}
+                        {prospect.linkedin_url && (
+                          <span className="text-xs text-blue-400/70 flex items-center gap-0.5">
+                            <Linkedin className="w-3 h-3" /> {prospect.linkedin_url.replace('https://linkedin.com/in/', 'in/')}
+                          </span>
+                        )}
+                        {!prospect.twitter_handle && !prospect.linkedin_url && (
+                          <span className="text-xs text-zinc-500">No social</span>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </TableCell>

@@ -35,7 +35,7 @@ export interface WorkspaceSettings {
 }
 
 export interface ConnectedAccount {
-  platform: 'twitter' | 'google_calendar' | 'calendly';
+  platform: 'twitter' | 'linkedin' | 'google_calendar' | 'calendly';
   username?: string;
   connected_at: string;
   status: 'active' | 'expired' | 'error';
@@ -80,7 +80,12 @@ export type SignalType =
   | 'job_change'
   | 'post_engagement'
   | 'hashtag_match'
-  | 'thread_participation';
+  | 'thread_participation'
+  // LinkedIn-specific signals
+  | 'profile_view'
+  | 'linkedin_engagement'
+  | 'company_growth'
+  | 'competitor_follower';
 
 export interface Signal {
   id: string;
