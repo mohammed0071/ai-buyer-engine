@@ -43,7 +43,7 @@ export default function LandingPage() {
             Book meetings.
           </h1>
           <p className="text-xl text-zinc-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-            AI Buyer Engine monitors X/Twitter AND LinkedIn for real-time buying signals, warms up prospects with intelligent engagement across both platforms, and books qualified meetings — all on autopilot.
+            AI Buyer Engine monitors X/Twitter AND LinkedIn for real-time buying signals, warms up prospects with intelligent engagement across both platforms, and books qualified meetings - all on autopilot.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/auth/signup">
@@ -86,7 +86,7 @@ export default function LandingPage() {
               The complete signal-driven sales engine
             </h2>
             <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-              From signal detection to booked meeting — fully automated, intelligently orchestrated.
+              From signal detection to booked meeting - fully automated, intelligently orchestrated.
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -94,7 +94,7 @@ export default function LandingPage() {
               {
                 icon: Target,
                 title: 'Signal Detection',
-                description: 'Monitor X/Twitter AND LinkedIn for buyer intent signals — job changes, pain points, competitor engagement, buying language, and more.',
+                description: 'Monitor X/Twitter AND LinkedIn for buyer intent signals - job changes, pain points, competitor engagement, buying language, and more.',
                 color: 'from-red-500 to-orange-500',
               },
               {
@@ -118,7 +118,7 @@ export default function LandingPage() {
               {
                 icon: Zap,
                 title: 'ICP Targeting',
-                description: 'Define your ideal customer profile and let AI find buyers that match — automatically.',
+                description: 'Define your ideal customer profile and let AI find buyers that match - automatically.',
                 color: 'from-yellow-500 to-amber-500',
               },
               {
