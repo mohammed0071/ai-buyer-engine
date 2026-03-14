@@ -1,36 +1,112 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Buyer Engine
+
+A B2B SaaS platform that detects in-market buyers via X/Twitter signals, automates personalized outreach, and books qualified meetings — all on autopilot.
+
+## Features
+
+- **Signal Detection** - Monitor X/Twitter for real-time buyer intent signals (pain points, competitor engagement, buying language)
+- **ICP Configuration** - Build and manage ideal customer profiles with form-based tools
+- **AI Outreach** - Automated warm-up, personalized DMs, and multi-turn conversation management
+- **Meeting Booking** - Google Calendar and Calendly integration for automated booking
+- **Dashboard** - Real-time signal feed, pipeline view, and analytics
+- **Stripe Billing** - Subscription management ready
+
+## Tech Stack
+
+- **Frontend**: Next.js 14 (App Router) + Tailwind CSS
+- **Database**: Supabase (PostgreSQL + Auth + Realtime)
+- **Payments**: Stripe
+- **UI Components**: Radix UI + custom components
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- npm or yarn
+- Supabase account
+- Stripe account (for billing)
+
+### Installation
 
 ```bash
+# Clone the repository
+cd app
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.local .env.local
+# Edit .env.local with your credentials
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```env
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Stripe
+STRIPE_SECRET_KEY=sk_test_...
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
 
-## Learn More
+# X/Twitter API (placeholder)
+X_API_KEY=placeholder
 
-To learn more about Next.js, take a look at the following resources:
+# OpenAI
+OPENAI_API_KEY=sk-...
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# App
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Database Setup
 
-## Deploy on Vercel
+1. Create a new Supabase project
+2. Run the SQL from `supabase/schema.sql` in the Supabase SQL Editor
+3. Update your environment variables with Supabase credentials
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+app/
+├── src/
+│   ├── app/               # Next.js App Router pages
+│   │   ├── auth/          # Auth pages (login, signup)
+│   │   ├── dashboard/     # Main dashboard pages
+│   │   └── api/           # API routes
+│   ├── components/        # React components
+│   │   └── ui/            # Reusable UI components
+│   ├── lib/               # Utilities and mock data
+│   └── types/             # TypeScript types
+├── supabase/
+│   └── schema.sql         # Database schema
+└── public/                # Static assets
+```
+
+## Deployment
+
+### Vercel (Recommended)
+
+1. Push your code to GitHub
+2. Import the project in Vercel
+3. Configure environment variables
+4. Deploy
+
+### Build for Production
+
+```bash
+npm run build
+npm start
+```
+
+## License
+
+MIT
